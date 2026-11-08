@@ -1,0 +1,75 @@
+# ORB-IEX settings for the Oracle VM (unattended PAPER trading under systemd).
+# Same strategy settings as config/settings.toml; only paths and mode differ.
+# All runtime data lives under /home/opc/orb_iex_data (persistent disk).
+# Strict: unknown keys, wrong types and out-of-range values stop the bot.
+# Secrets never go here. Put APCA_API_KEY_ID / APCA_API_SECRET_KEY in .env.
+# Strategy constants (20 positions, 14-day lookback, 5-min range, ATR/volume
+# thresholds, 0.10 ATR stop, 1% risk) are fixed in code
+# (src/orb_iex/constants.py), as they are const/readonly in Main.cs.
+
+[strategy]
+variant = "ORB-IEX"          # locked
+universe_size = 200          # unused: universe = all eligible NYSE/Nasdaq stocks, daily
+max_gross_exposure = 4.0     # paper: max 4x; each position <= 4 x equity / 20
+
+[costs]
+# Modeled costs only. Alpaca paper charges no commission.
+commission_per_share = 0.0035
+slippage_per_share = 0.01
+
+[data]
+opening_feed = "iex"         # locked: free real-time IEX for the 09:30-09:35 bar
+history_feed = "sip"         # locked: free SIP history (older than 15 min)
+adjustment = "raw"           # locked: Main.cs uses Raw prices
+history_min_age_minutes = 16 # SIP requests end at least this long ago
+max_symbols_per_request = 200  # probe proved 4000 works (2026-09-25); 200 kept on purpose
+market_data_calls_per_minute = 150  # Basic plan limit is 200
+
+[trading]
+trading_calls_per_minute = 150      # Trading API limit is 200
+# Explicit switch for `python -m orb_iex paper`. Set to false to make the paper
+# command refuse to start. There is no live-trading switch anywhere.
+enable_paper_orders = true
+order_poll_seconds = 10             # REST order reconcile (backs up the stream)
+max_quote_age_seconds = 2           # an entry may use an IEX quote at most this old, else it is skipped ("stale_quote").
+                                    # No usable quote at all = skip too ("skip_quote_unavailable"); Alpaca is not the fallback.
+max_quote_spread_pct = 1.0          # spread (ask-bid)/mid wider than this percent = skip ("skip_spread_too_wide"), no order
+
+[schedule]
+scan_delay_seconds = 3              # IEX opening-bar request at 09:35:03
+diagnostic_rescan_delay_seconds = 120  # diagnostic re-request at ~09:37
+eod_cancel_timeout_seconds = 20      # EOD starts at close-60s
+scan_grace_seconds = 60             # restart just after 09:35:03 may still scan
+# Operational default 10:30 ET, NOT a researched strategy cutoff (to be backtested separately). Allowed 09:40-15:30 ET. Unfilled ORB entries are
+# cancelled here and never re-entered; early close: close-30 min. Change this one line to change the cutoff.
+entry_cutoff_time = "10:30"
+protection_timeout_seconds = 20
+exit_timeout_seconds = 30
+
+[runtime]
+mode = "paper"               # the service runs `python -m orb_iex ... paper`
+data_dir = "/home/opc/orb_iex_data"
+log_level = "INFO"
+request_timeout_seconds = 15
+min_free_disk_mb = 512       # below this: refuse to start / block new entries (10 GB VM boot disk)
+log_retention_days = 30      # daily JSON logs: gzip after 1 day, delete after 30
+shutdown_timeout_seconds = 20 # Ctrl+C / SIGTERM: time allowed to cancel and confirm unfilled entries (systemd stops after 60)
+
+[journal]
+# Append-only trading journal + daily/weekly/monthly exports.
+# On the Oracle VM use an absolute path on the persistent disk, for example:
+# dir = "/home/opc/orb_iex_data/journal"
+dir = "/home/opc/orb_iex_data/journal"
+export = true
+
+[safety]
+expected_account_prefix = "PA"      # paper account numbers
+kill_switch_file = "/home/opc/orb_iex_data/KILL"   # create this file to block new entries
+# Paper mode refuses to start (exit 2, no restart loop) unless BOTH hold:
+#  1. the account behind the keys is on this allowlist. Get the value with:
+#       python -m orb_iex --config config/settings.oracle.toml --env-file /home/opc/orb_iex_data/.env account-fingerprint
+#     then put it here, e.g.  allowed_account_fingerprints = ["0123456789abcdef"]
+#  2. env ORB_IEX_INSTANCE_ID (set in the systemd unit) equals account_owner_instance_id: this VM owns the account.
+# NOT distributed locking: see docs/SAFETY.md "Cross-machine".
+allowed_account_fingerprints = []     # EMPTY = the service will not start until you fill this in
+account_owner_instance_id = "oracle-vm"

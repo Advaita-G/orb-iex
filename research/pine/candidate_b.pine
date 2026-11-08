@@ -1,0 +1,73 @@
+//@version=6
+strategy("ORB-IEX candidate_b chart projection", overlay=true, initial_capital=100000, pyramiding=0, margin_long=25, margin_short=25, commission_type=strategy.commission.cash_per_contract, commission_value=0.0035, slippage=1, calc_on_every_tick=false, calc_on_order_fills=false, process_orders_on_close=false, use_bar_magnifier=false)
+// Single-chart RESEARCH projection of frozen bc9ecde. No universe rank or IEX quote replay.
+// Requires regular-session US-stock candles; 1 or 5 minutes. No alerts or broker routing.
+// B fails closed: native historical charts cannot prove its decision-time quote/depth gates.
+bool candidateB = true
+int startDate = input.time(timestamp("01 Jan 2016 00:00 +0000"), "Research start")
+int endDate = input.time(timestamp("29 Oct 2026 00:00 +0000"), "Research end (exposed sample)")
+if not timeframe.isminutes or (timeframe.multiplier != 1 and timeframe.multiplier != 5)
+    runtime.error("Use regular-session 1-minute or 5-minute US-stock candles")
+string regular = ticker.new(syminfo.prefix, syminfo.ticker, session.regular)
+[atr, adv] = request.security(regular, "D", [ta.sma(ta.tr(true), 14)[1], ta.sma(volume, 14)[1]], lookahead=barmerge.lookahead_on)
+int nyMinute = hour(time, "America/New_York") * 60 + minute(time, "America/New_York")
+int closeMinute = hour(time_close, "America/New_York") * 60 + minute(time_close, "America/New_York")
+var float openingOpen = na
+var float openingHigh = na
+var float openingLow = na
+var float openingClose = na
+var float openingVolume = 0.0
+var int openingBars = 0
+var bool started = false
+var float riskTicks = na
+var array<float> pastVolumes = array.new_float()
+if timeframe.change("D")
+    openingBars := 0
+    started := false
+    openingVolume := 0.0
+if barstate.isconfirmed and session.ismarket and nyMinute >= 570 and nyMinute < 575
+    if nyMinute == 570
+        openingOpen := open
+        openingHigh := high
+        openingLow := low
+        started := true
+    if started
+        openingHigh := math.max(openingHigh, high)
+        openingLow := math.min(openingLow, low)
+        openingClose := close
+        openingVolume += volume
+        openingBars += 1
+    if closeMinute == 575 and started and openingBars == 5 / timeframe.multiplier
+        float historicalVolume = array.size(pastVolumes) == 14 ? array.avg(pastVolumes) : na
+        float rvol = historicalVolume > 0 ? openingVolume / historicalVolume : na
+        int direction = openingClose > openingOpen ? 1 : openingClose < openingOpen ? -1 : 0
+        float trigger = direction > 0 ? math.ceil(openingHigh * 100) / 100 : math.floor(openingLow * 100) / 100
+        float plannedStop = math.round((trigger - direction * 0.1 * atr) * 100) / 100
+        float distance = math.abs(trigger - plannedStop)
+        float riskQty = distance > 0 ? math.floor(strategy.equity / 20 * 0.01 / distance) : 0
+        float weightQty = math.floor(strategy.equity * 0.9975 * 0.2 / (openingClose + 0.0035))
+        float capQty = math.floor(strategy.equity * 0.2 / trigger)
+        float qty = math.max(0, math.min(riskQty, math.min(weightQty, capQty)))
+        if candidateB
+            qty := math.min(qty, math.floor(0.01 * openingVolume))
+        bool commonRules = openingOpen > 5 and rvol >= 1 and atr > 0.5 and adv >= 1000000 and direction != 0 and qty > 0
+        bool triggerClear = direction > 0 ? trigger >= close + 0.01 : trigger <= close - 0.01
+        bool quoteEvidenceAvailable = not candidateB
+        if commonRules and triggerClear and quoteEvidenceAvailable and time >= startDate and time < endDate and strategy.position_size == 0
+            riskTicks := math.max(1, math.round(0.1 * atr / syminfo.mintick))
+            strategy.entry("orb", direction > 0 ? strategy.long : strategy.short, qty=qty, stop=trigger)
+            strategy.exit("protect", "orb", loss=riskTicks)
+        array.push(pastVolumes, openingVolume)
+        if array.size(pastVolumes) > 14
+            array.shift(pastVolumes)
+if barstate.isconfirmed and session.ismarket
+    if closeMinute >= 630
+        strategy.cancel("orb")
+    if session.islastbar_regular
+        strategy.cancel_all()
+        strategy.close_all(comment="session close projection", immediately=true)
+plot(started ? openingHigh : na, "Opening high", color=color.green)
+plot(started ? openingLow : na, "Opening low", color=color.red)
+var table notice = table.new(position.top_right, 1, 1)
+if barstate.islast
+    table.cell(notice, 0, 0, candidateB ? "B: NO QUOTE/DEPTH HISTORY - ENTRIES BLOCKED" : "A: chart projection; no top-20 universe or IEX execution", text_color=color.white, bgcolor=color.gray)

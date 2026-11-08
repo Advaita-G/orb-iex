@@ -1,0 +1,17 @@
+{
+  "provenance": "Observed local log fill deltas; historical quote snapshots and full rejection JSON were not retained. Replays inject those deltas and cancel races into the offline broker, not the real account.",
+  "incidents": [
+    {"day":"2026-10-02","symbol":"CTVA","direction":-1,"qty":72,"overnight":true},
+    {"day":"2026-10-02","symbol":"SPHD","direction":-1,"qty":409,"overnight":true},
+    {"day":"2026-09-30","symbol":"CBRS","direction":-1,"qty":45,"entry":"177.86","atr":"10.9","deltas":[],"late_fill_time":"15:59"},
+    {"day":"2026-09-30","symbol":"KOD","direction":1,"qty":72,"entry":"97.88","atr":"6.8","deltas":[34,19,4,15],"error":"HTTP 422: cannot replace order in pending_new status"},
+    {"day":"2026-10-01","symbol":"SNPS","direction":1,"qty":33,"entry":"480.00","atr":"15","deltas":[28,2,3]},
+    {"day":"2026-10-01","symbol":"UMAC","direction":-1,"qty":330,"entry":"24.23","atr":"1.5","deltas":[93,45,156,20],"error":"HTTP 403: potential wash trade detected. use complex orders"},
+    {"day":"2026-10-01","symbol":"IBM","direction":1,"qty":73,"entry":"233.47","atr":"6.7","deltas":[11],"error":"HTTP 403: potential wash trade detected. use complex orders"},
+    {"day":"2026-10-01","symbol":"NKTR","direction":-1,"qty":137,"entry":"54.44","atr":"3.6","deltas":[134,2,1],"fill_price":"54.05","synthetic_quote":"54.99","error":"HTTP 422: stop price must be greater than current price"},
+    {"day":"2026-10-02","symbol":"EXTR","direction":-1,"qty":704,"entry":"22.35","atr":"0.6948214285714286","deltas":[450],"error":"HTTP 403: potential wash trade detected. use complex orders"},
+    {"day":"2026-10-02","symbol":"HOMB","direction":-1,"qty":684,"entry":"28.72","atr":"0.5035714285714286","deltas":[65,575,1,43],"error":"HTTP 403: potential wash trade detected. use complex orders"},
+    {"day":"2026-10-02","symbol":"LNT","direction":1,"qty":303,"entry":"64.82","atr":"1.069642857142857","deltas":[26,121],"error":"HTTP 403: potential wash trade detected. use complex orders"},
+    {"day":"2026-10-02","symbol":"NKE","direction":1,"qty":493,"entry":"33.07","atr":"0.9653285714285714","deltas":[129,30,334],"error":"HTTP 403: potential wash trade detected. use complex orders"}
+  ]
+}

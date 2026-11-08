@@ -1,0 +1,83 @@
+[
+  {
+    "order_id": "f4afab37-2dac-4117-9451-1443706c2572",
+    "symbol": "NKE",
+    "role": "entry",
+    "side": "buy",
+    "qty": "129",
+    "price": "33.1",
+    "ts": "2026-10-02T13:35:28.509902441Z"
+  },
+  {
+    "order_id": "f4afab37-2dac-4117-9451-1443706c2572",
+    "symbol": "NKE",
+    "role": "entry",
+    "side": "buy",
+    "qty": "30",
+    "price": "33.1",
+    "ts": "2026-10-02T13:35:29.924636849Z"
+  },
+  {
+    "order_id": "f4afab37-2dac-4117-9451-1443706c2572",
+    "symbol": "NKE",
+    "role": "entry",
+    "side": "buy",
+    "qty": "334",
+    "price": "33.08999977544910179640718563",
+    "ts": "2026-10-02T13:35:30.924484289Z"
+  },
+  {
+    "order_id": "bb64437e-d53b-4842-87fb-14a86d4becee",
+    "symbol": "NKE",
+    "role": "lateexit",
+    "side": "sell",
+    "qty": "121",
+    "price": "33.01",
+    "ts": "2026-10-02T13:35:47.393962036Z"
+  },
+  {
+    "order_id": "bb64437e-d53b-4842-87fb-14a86d4becee",
+    "symbol": "NKE",
+    "role": "lateexit",
+    "side": "sell",
+    "qty": "105",
+    "price": "32.96000019047619047619047619",
+    "ts": "2026-10-02T13:35:48.443994973Z"
+  },
+  {
+    "order_id": "bb64437e-d53b-4842-87fb-14a86d4becee",
+    "symbol": "NKE",
+    "role": "lateexit",
+    "side": "sell",
+    "qty": "86",
+    "price": "32.97000181395348837209302326",
+    "ts": "2026-10-02T13:35:50.268436357Z"
+  },
+  {
+    "order_id": "bb64437e-d53b-4842-87fb-14a86d4becee",
+    "symbol": "NKE",
+    "role": "lateexit",
+    "side": "sell",
+    "qty": "15",
+    "price": "32.9799898",
+    "ts": "2026-10-02T13:35:51.032164266Z"
+  },
+  {
+    "order_id": "bb64437e-d53b-4842-87fb-14a86d4becee",
+    "symbol": "NKE",
+    "role": "lateexit",
+    "side": "sell",
+    "qty": "7",
+    "price": "33.01000957142857142857142857",
+    "ts": "2026-10-02T13:35:52.796379256Z"
+  },
+  {
+    "order_id": "bc3aca49-45d1-4b42-9295-f87b121074a0",
+    "symbol": "NKE",
+    "role": "flatten",
+    "side": "sell",
+    "qty": "159",
+    "price": "33.01",
+    "ts": "2026-10-02T13:35:59.563141186Z"
+  }
+]

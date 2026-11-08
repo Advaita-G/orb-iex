@@ -1,0 +1,40 @@
+[Unit]
+Description=ORB-IEX Alpaca PAPER trading bot (paper only, free data)
+Documentation=file:///home/opc/alpaca-orb-bot/orb_iex/docs/RUNBOOK.md
+Wants=network-online.target time-sync.target
+After=network-online.target time-sync.target
+# Keep restarting forever after crashes or network outages.
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=opc
+Group=opc
+WorkingDirectory=/home/opc/alpaca-orb-bot/orb_iex
+# No keys here. The bot reads them only from the protected .env file below and
+# refuses to start unless that file has mode 600.
+ExecStart=/home/opc/alpaca-orb-bot/orb_iex/.venv/bin/python -m orb_iex --config config/settings.oracle.toml --env-file /home/opc/orb_iex_data/.env --require-private-env paper
+Environment=PYTHONUNBUFFERED=1
+# This machine's identity. The bot trades only if it equals safety.account_owner_instance_id in the settings.
+Environment=ORB_IEX_INSTANCE_ID=oracle-vm
+Restart=always
+# 5 s: after a fatal error (exit 7) the bot has already blocked entries, reconciled once and protected or
+# flattened its positions; a fast restart re-runs recovery and re-protects within seconds.
+RestartSec=5
+# 2 = safety stop, 3 = config error (wrong keys, live URL, .env not 600, account not allowlisted / not the
+# declared owner): stay stopped and wait for a person instead of looping.
+RestartPreventExitStatus=2 3
+# Clean stop: SIGTERM is turned into the same shutdown as Ctrl+C; state is saved.
+KillSignal=SIGTERM
+TimeoutStopSec=60
+# Hardening: the bot only needs to write to its data directory.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/home/opc/orb_iex_data
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=orb-iex-paper
+
+[Install]
+WantedBy=multi-user.target

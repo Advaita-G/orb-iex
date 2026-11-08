@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# ORB-IEX control on the Oracle VM. Installed to /usr/local/bin/orbctl.
+set -euo pipefail
+
+SERVICE="orb-iex-paper"
+APP_DIR="/home/opc/alpaca-orb-bot/orb_iex"
+DATA_DIR="/home/opc/orb_iex_data"
+PY="$APP_DIR/.venv/bin/python"
+CLI=("$PY" -m orb_iex --config config/settings.oracle.toml --env-file "$DATA_DIR/.env")
+
+cd "$APP_DIR"
+case "${1:-help}" in
+  start)    sudo systemctl start "$SERVICE"; sudo systemctl --no-pager status "$SERVICE" | head -5 ;;
+  stop)     sudo systemctl stop "$SERVICE"; echo "stopped (state saved; open stops stay at Alpaca)" ;;
+  restart)  sudo systemctl restart "$SERVICE"; sudo systemctl --no-pager status "$SERVICE" | head -5 ;;
+  status)   sudo systemctl --no-pager status "$SERVICE" | head -12 ;;
+  logs)     sudo journalctl -u "$SERVICE" -f -n 100 ;;
+  health)   "${CLI[@]}" health ;;
+  check)    "${CLI[@]}" --require-private-env check-alpaca ;;
+  review)   shift; "${CLI[@]}" review "$@" ;;
+  summary)  day="${2:-$(TZ=America/New_York date +%F)}"
+            f="$DATA_DIR/journal/exports/daily/summary_$day.md"
+            if [ -f "$f" ]; then cat "$f"; else echo "no summary for $day yet (written after the close): $f"; fi ;;
+  kill-on)  touch "$DATA_DIR/KILL"; echo "kill switch ON: no new entries (stops/exits continue)" ;;
+  kill-off) rm -f "$DATA_DIR/KILL"; echo "kill switch OFF" ;;
+  update)   sudo systemctl stop "$SERVICE"
+            git -C "$APP_DIR/.." pull --ff-only origin main
+            .venv/bin/pip install -q -e ".[dev]"
+            .venv/bin/python -m pytest -q | tail -1
+            sudo systemctl start "$SERVICE" ;;
+  *) cat <<'EOF'
+orbctl start|stop|restart|status   control the orb-iex-paper service
+orbctl logs                        follow live logs (Ctrl+C to leave)
+orbctl health                      bot, Alpaca, calendar, journal, data freshness, disk
+orbctl check                       read-only Alpaca check (no orders)
+orbctl review [--date YYYY-MM-DD]  daily review (default: latest day)
+orbctl summary [YYYY-MM-DD]        print the daily journal summary (default: today, ET)
+orbctl kill-on | kill-off          block / allow new entries
+orbctl update                      stop, pull main, install, test, start
+EOF
+  ;;
+esac

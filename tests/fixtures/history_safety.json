@@ -1,0 +1,10 @@
+{
+  "provenance": "Synthetic point-in-time fixtures. CTVA price levels and event identity reflect observed evidence; fixture observation times do not claim when Alpaca first published an event.",
+  "cases": [
+    {"name":"ctva_distribution","previous_close":"77.68","next_open":"14.44","action":{"source_symbol":"CTVA","new_symbol":"VYLR","kind":"spin_offs","ex_date":"2026-10-01"},"expected":"corporate_action"},
+    {"name":"ordinary_market_gap","previous_close":"50","next_open":"65","action":null,"expected":null},
+    {"name":"split_adjusted_history","previous_close":"25","next_open":"25","action":{"symbol":"CTVA","kind":"forward_splits","ex_date":"2026-10-01","old_rate":1,"new_rate":2},"expected":"corporate_action"},
+    {"name":"missing_metadata","previous_close":"77.68","next_open":"14.44","metadata_missing":true,"expected":"action_metadata_unavailable"},
+    {"name":"unexplained_extreme_gap","previous_close":"77.68","next_open":"14.44","action":null,"expected":"unexplained_discontinuity"}
+  ]
+}

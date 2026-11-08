@@ -1,0 +1,17 @@
+# Unqualified PAPER research candidate: signal/shadow only; cannot arm orders.
+[strategy]
+research_profile = "candidate_b"
+
+[trading]
+enable_paper_orders = false
+
+[runtime]
+mode = "signal"
+data_dir = "runtime/candidate_b"
+
+[journal]
+dir = "runtime/candidate_b/journal"
+
+[safety]
+kill_switch_file = "runtime/candidate_b/KILL"
+allowed_account_fingerprints = []

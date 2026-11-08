@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "orb-iex"
+version = "0.1.0"
+description = "ORB-IEX: Alpaca PAPER-only port of the Main.cs opening-range breakout strategy"
+requires-python = ">=3.11"
+dependencies = ["requests>=2.31", "tzdata"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+research = ["numpy", "pandas", "pyarrow", "scipy"]  # quantlab only; the trading bot never imports these
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+# The dashboard ships as static, dependency-free HTML/CSS/JS served by stdlib http.server.
+"orb_iex.dashboard" = ["static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

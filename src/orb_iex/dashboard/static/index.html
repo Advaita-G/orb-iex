@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#0b0b0d">
+<title>Paper P&amp;L journal</title>
+<link rel="preload" href="/fonts/mona-sans-wdth.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<a class="skip" href="#app">Skip to content</a>
+
+<header class="masthead">
+  <div class="wrap masthead-inner">
+    <a class="wordmark" href="#/overview" data-view="overview-home">Paper P<span>&amp;</span>L</a>
+    <nav class="nav" aria-label="Pages">
+      <a href="#/overview" data-view="overview">Overview</a>
+      <a href="#/today" data-view="today">Today</a>
+      <a href="#/trades" data-view="trades">Trades</a>
+      <a href="#/calendar" data-view="calendar">Calendar</a>
+      <a href="#/mistakes" data-view="mistakes">Mistakes</a>
+      <a href="#/research" data-view="research">Research</a>
+    </nav>
+    <a class="botpill" id="botpill" href="#/bot" data-view="bot"><span class="dot" aria-hidden="true"></span><span id="botpill-text">Checking the bot</span></a>
+  </div>
+</header>
+
+<section class="score" id="score" aria-label="Totals since the first trade"></section>
+
+<main id="app" tabindex="-1"><div class="wrap"><p class="loading">Opening the journal…</p></div></main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Read-only. This page reads the bot's journals and cannot place, change or cancel orders.</p>
+    <p id="foot-updated"></p>
+  </div>
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>

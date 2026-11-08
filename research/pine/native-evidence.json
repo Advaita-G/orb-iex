@@ -1,0 +1,85 @@
+{
+  "symbol": "NASDAQ:AAPL",
+  "chart_label": "Apple Inc 5 NASDAQ; chart identifies native Cboe pricing",
+  "timeframe_minutes": 5,
+  "visible_range": [
+    "2026-07-27",
+    "2026-10-28"
+  ],
+  "initial_capital": 100000,
+  "normal_costs": {
+    "commission_per_share_per_side": 0.0035,
+    "slippage_ticks_per_side": 1
+  },
+  "baseline_a_chart_projection": {
+    "trades": 14,
+    "net_pnl_usd": -125.79,
+    "max_drawdown_usd": 465.78,
+    "win_rate_percent": 7.14,
+    "profit_factor": 0.77,
+    "expectancy_usd": -8.98
+  },
+  "candidate_b": {
+    "trades": 0,
+    "status": "historical quote and depth evidence unavailable; entries blocked"
+  },
+  "compile_and_native_execution": "Both Pine v6 scripts compiled and executed through native chart UI",
+  "portfolio_parity": false,
+  "limits": [
+    "no dynamic universe rank",
+    "native Cboe chart differs from IEX/SIP",
+    "bar close EOD and emulator execution differ",
+    "no quote, depth, halts, borrow, queue, or cancel-race replay",
+    "no untouched sample"
+  ],
+  "doubled_cost_chart_projection": {
+    "trades": 14,
+    "net_pnl_usd": -139.93,
+    "max_drawdown_usd": 476.21,
+    "win_rate_percent": 7.14,
+    "profit_factor": 0.75,
+    "expectancy_usd": -9.99,
+    "commission_per_share_per_side": 0.007,
+    "slippage_ticks_per_side": 2
+  },
+  "candidate_editor_source_verification": {
+    "trimmed_characters": 4606,
+    "fnv1a32": "e7675381",
+    "clipboard_matched_submitted_source": true
+  },
+  "baseline_editor_source_verification": {
+    "trimmed_characters": 4606,
+    "fnv1a32": "11e791a5",
+    "clipboard_matched_submitted_source": true
+  },
+  "workflow_verification": {
+    "checked_at": "2026-10-29T05:24:28.772581+00:00",
+    "account": "redacted",
+    "plan": "Basic",
+    "layout": "zOWgj5EF",
+    "interval_minutes": 5,
+    "session": "regular",
+    "baseline_saved": "ORB-IEX baseline_a chart projection v1.0",
+    "candidate_save": "Blocked by one-saved-script limit; compiled chart and unsaved editor preserved",
+    "webhooks": "Blocked by Basic-to-Essential upgrade dialog",
+    "technical_alerts": "Unavailable on Basic per official plan comparison",
+    "source_rules_changed": false,
+    "candidate_editor_fnv1a32": "e7675381",
+    "tested_symbols": {
+      "NASDAQ:AAPL": {
+        "baseline_trades": 14,
+        "baseline_pnl_usd": -125.79,
+        "candidate_trades": 0
+      },
+      "NASDAQ:MSFT": {
+        "baseline_trades": 13,
+        "baseline_pnl_usd": -242.48,
+        "candidate_trades": 0
+      }
+    },
+    "journal_connection": "Navigation links only; no TradingView import or automatic synchronization",
+    "journal_url": "http://127.0.0.1:8788/#/research?tab=paired",
+    "research_end_utc": "2026-10-29T00:00:00Z",
+    "research_sample": "exposed historical chart projections, not forward qualification"
+  }
+}

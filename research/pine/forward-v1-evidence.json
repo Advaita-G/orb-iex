@@ -1,0 +1,36 @@
+{
+  "version": "forward-v1",
+  "checked_at": "2026-10-29T15:26:25.042978+00:00",
+  "historical_sources_and_native_evidence": "unchanged",
+  "fingerprints": {
+    "baseline_a_forward_v1": {
+      "trimmed_characters": 4944,
+      "fnv1a32": "83ed08d1"
+    },
+    "candidate_b_forward_v1": {
+      "trimmed_characters": 4945,
+      "fnv1a32": "8129b70a"
+    }
+  },
+  "native_compile": {
+    "baseline_a_forward_v1": [
+      "AAPL 5 minutes",
+      "MSFT 5 minutes"
+    ],
+    "candidate_b_forward_v1": [
+      "AAPL 5 minutes"
+    ]
+  },
+  "candidate_b_status": "No trades; quote/depth evidence gate unchanged",
+  "forward_window": {
+    "start_utc": "2026-10-29T00:00:00Z",
+    "use_end_default": false,
+    "end_default_utc": "2100-01-01T00:00:00Z",
+    "invalid_enabled_end": "Native runtime error verified: Forward end must be after forward start",
+    "restored_defaults": true
+  },
+  "native_msft_b_forward_recheck": "Not repeated: Basic indicator-count limit on disposable chart; historical B MSFT execution remains in prior evidence",
+  "saved_scripts_and_layouts": "No Save or publication; original baseline library script and saved layout preserved",
+  "future_session_completion": "Not claimed; current session and after-close review still pending",
+  "sources": "TradingView projections independent of Alpaca SHADOW/PAPER; no automatic synchronization"
+}

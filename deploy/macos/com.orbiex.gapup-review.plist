@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>ORB_IEX_INSTANCE_ID</key>
+		<string>orb-mac-supervised</string>
+		<key>PATH</key>
+		<string>~/.npm-global/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+	<key>Label</key>
+	<string>com.orbiex.gapup-review</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>~/orb-iex/.venv/bin/python</string>
+		<string>-u</string>
+		<string>-m</string>
+		<string>orb_iex.gapup_review</string>
+		<string>--pending</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StandardErrorPath</key>
+	<string>~/orb-iex/runtime/logs/gapup-review-launchd.log</string>
+	<key>StandardOutPath</key>
+	<string>~/orb-iex/runtime/logs/gapup-review-launchd.log</string>
+	<key>StartInterval</key>
+	<integer>900</integer>
+	<key>WorkingDirectory</key>
+	<string>~/orb-iex</string>
+</dict>
+</plist>
